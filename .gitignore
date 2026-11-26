@@ -1,0 +1,12 @@
+# Pliki kompilacji
+*.o
+*.d
+bin/
+build/
+
+# Logi i raporty z przebiegów symulacji
+logs/
+*.log
+
+# System
+.DS_Store
