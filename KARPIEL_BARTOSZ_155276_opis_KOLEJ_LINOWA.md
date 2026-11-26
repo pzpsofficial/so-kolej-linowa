@@ -32,7 +32,7 @@ Napisz procedury Kasjer, Pracownik i Turysta symulujące działanie kolei linowe
 
 ## 2. Doprecyzowanie treści
 
-Niektóre zdania w treści tematu można rozumieć na kilka sposobów. Poniżej jest przyjęta interpretacja (pkt 1.3 zasad dopuszcza takie doprecyzowanie).
+Niektóre zdania w treści tematu można rozumieć na kilka sposobów. Poniżej jest przyjęta interpretacja (pkt 1.3 zasad dopuszcza takie doprecyzowanie), uzgodniona z prowadzącym.
 
 ### 2.1. Krzesełka
 
@@ -72,7 +72,7 @@ Niektóre zdania w treści tematu można rozumieć na kilka sposobów. Poniżej 
 
 - Ok. 1% turystów to VIP-y. VIP ma karnet i przechodzi przez bramki wejściowe tak jak inni, ale bez kolejki: gdy zwolni się miejsce w limicie N, wchodzi przed czekającymi.
 - Limit N obowiązuje również VIP-y.
-- VIP nie ma pierwszeństwa w kasie ani przy wsiadaniu na krzesełko.
+- W kasie VIP stoi w kolejce jak wszyscy. Przy wsiadaniu na krzesełko też nie ma pierwszeństwa.
 
 ### 2.7. Stacja górna i kolejne wjazdy
 
@@ -83,7 +83,7 @@ Niektóre zdania w treści tematu można rozumieć na kilka sposobów. Poniżej 
 ### 2.8. Zatrzymanie i wznowienie kolei
 
 - Sygnał1 to `SIGUSR1`, sygnał2 to `SIGUSR2`.
-- Zagrożenie wywołuje się z zewnątrz, wysyłając sygnał do procesu pracownika1 albo pracownika2 (np. poleceniem `kill`).
+- Zagrożenie można wywołać z terminala, wysyłając sygnał do procesu pracownika1 albo pracownika2 (poleceniem `kill`). Dodatkowo pracownicy mogą sami losowo wykrywać zagrożenie w trakcie symulacji (parametr, domyślnie wyłączone).
 - Pracownik, który odebrał zagrożenie, zatrzymuje kolej i zapamiętuje, że to on ją zatrzymał. W czasie postoju nikt nie wsiada ani nie wysiada, a krzesełka stoją.
 - Wznowić kolej może tylko ten pracownik. Wysyła drugiemu pracownikowi komunikat i czeka na odpowiedź o gotowości. Dopiero po jej otrzymaniu uruchamia kolej (sygnał2). Kolej nie rusza bez tej odpowiedzi.
 
