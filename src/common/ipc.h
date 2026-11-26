@@ -11,6 +11,7 @@
 #include "typy.h"
 
 typedef struct {
+    key_t klucz_semafory, klucz_pamiec, klucz_kasa;   /* klucze z ftok() */
     int semafory;        /* identyfikator zestawu semaforów */
     int pamiec;          /* identyfikator segmentu pamięci dzielonej */
     int kasa;            /* identyfikator kolejki komunikatów kasy */

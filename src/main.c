@@ -258,6 +258,9 @@ int main(int argc, char **argv)
     zegar_start(zasoby.stan);
     log_ustaw_stan(zasoby.stan);
     konfiguracja_do_logu(&konf);
+    log_zapisz(LOG_INFO, "struktury IPC: semafory 0x%08x (id %d), pamięć 0x%08x (id %d), kolejka kasy 0x%08x (id %d)",
+               (unsigned int)zasoby.klucz_semafory, zasoby.semafory, (unsigned int)zasoby.klucz_pamiec,
+               zasoby.pamiec, (unsigned int)zasoby.klucz_kasa, zasoby.kasa);
 
     /* Osieroceni potomkowie (np. turyści po śmierci generatora) trafią do nas. */
     SPRAWDZ(prctl(PR_SET_CHILD_SUBREAPER, 1));

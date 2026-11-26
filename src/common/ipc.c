@@ -79,9 +79,12 @@ static StanWspolny *dolacz_pamiec(int id)
 
 void ipc_utworz(ZasobyIpc *z)
 {
-    z->semafory = utworz_struktura(klucz(FTOK_SEMAFORY), pobierz_semafory, usun_semafory, "semafory");
-    z->pamiec = utworz_struktura(klucz(FTOK_PAMIEC), pobierz_pamiec, usun_pamiec, "pamięć dzielona");
-    z->kasa = utworz_struktura(klucz(FTOK_KASA), pobierz_kolejke, usun_kolejke, "kolejka kasy");
+    z->klucz_semafory = klucz(FTOK_SEMAFORY);
+    z->klucz_pamiec = klucz(FTOK_PAMIEC);
+    z->klucz_kasa = klucz(FTOK_KASA);
+    z->semafory = utworz_struktura(z->klucz_semafory, pobierz_semafory, usun_semafory, "semafory");
+    z->pamiec = utworz_struktura(z->klucz_pamiec, pobierz_pamiec, usun_pamiec, "pamięć dzielona");
+    z->kasa = utworz_struktura(z->klucz_kasa, pobierz_kolejke, usun_kolejke, "kolejka kasy");
 
     /* Wartości początkowe semaforów: muteks otwarty. */
     unsigned short wartosci[SEM_LICZBA];
@@ -95,9 +98,12 @@ void ipc_utworz(ZasobyIpc *z)
 
 void ipc_dolacz(ZasobyIpc *z)
 {
-    z->semafory = (int)SPRAWDZ(semget(klucz(FTOK_SEMAFORY), SEM_LICZBA, PRAWA_IPC));
-    z->pamiec = (int)SPRAWDZ(shmget(klucz(FTOK_PAMIEC), sizeof(StanWspolny), PRAWA_IPC));
-    z->kasa = (int)SPRAWDZ(msgget(klucz(FTOK_KASA), PRAWA_IPC));
+    z->klucz_semafory = klucz(FTOK_SEMAFORY);
+    z->klucz_pamiec = klucz(FTOK_PAMIEC);
+    z->klucz_kasa = klucz(FTOK_KASA);
+    z->semafory = (int)SPRAWDZ(semget(z->klucz_semafory, SEM_LICZBA, PRAWA_IPC));
+    z->pamiec = (int)SPRAWDZ(shmget(z->klucz_pamiec, sizeof(StanWspolny), PRAWA_IPC));
+    z->kasa = (int)SPRAWDZ(msgget(z->klucz_kasa, PRAWA_IPC));
     z->stan = dolacz_pamiec(z->pamiec);
 }
 
