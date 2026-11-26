@@ -5,7 +5,7 @@
  *   1. wczytuje i sprawdza parametry,
  *   2. tworzy plik logu i struktury IPC (jest ich jedynym właścicielem),
  *   3. uruchamia procesy obsługi przez fork() + exec(): kasjera, pracownika1,
- *      pracownika2 (generator turystów dojdzie w kolejnym kroku),
+ *      pracownika2 i generator turystów,
  *   4. pilnuje godzin pracy kolei (od Tp do Tk),
  *   5. na koniec dnia albo po Ctrl+C kończy wszystkie procesy, czeka na każdy
  *      z nich i usuwa struktury IPC.
@@ -54,13 +54,16 @@
 typedef struct {
     const char *nazwa;   /* nazwa w logu */
     char *argv[3];       /* argumenty programu, argv[0] = nazwa pliku w bin/ */
+    int moze_wczesniej;  /* 1 = poprawne zakończenie przed Tk nie jest błędem */
     pid_t pid;           /* 0 = proces nie działa */
 } ProcesObslugi;
 
 static ProcesObslugi obsluga[] = {
-    { "kasjer",     { "kasjer", NULL },         0 },
-    { "pracownik1", { "pracownik", "1", NULL }, 0 },
-    { "pracownik2", { "pracownik", "2", NULL }, 0 },
+    { "kasjer",     { "kasjer", NULL },         0, 0 },
+    { "pracownik1", { "pracownik", "1", NULL }, 0, 0 },
+    { "pracownik2", { "pracownik", "2", NULL }, 0, 0 },
+    /* Generator kończy pracę, gdy wpuści wszystkich turystów i ich odbierze. */
+    { "generator",  { "generator", NULL },      1, 0 },
 };
 #define LICZBA_OBSLUGI ((int)(sizeof obsluga / sizeof obsluga[0]))
 
@@ -173,7 +176,8 @@ static int odbierz_dzieci(void)
             char opis[96];
             opisz_status(status, opis, sizeof opis);
             obsluga[i].pid = 0;
-            if (zasoby.stan->koniec) {
+            int poprawnie = WIFEXITED(status) && WEXITSTATUS(status) == 0;
+            if (zasoby.stan->koniec || (obsluga[i].moze_wczesniej && poprawnie)) {
                 log_zapisz(LOG_INFO, "%s zakończył pracę (%s)", obsluga[i].nazwa, opis);
             } else {
                 log_zapisz(LOG_BLAD, "%s zakończył się przed końcem dnia (%s), kończę symulację",

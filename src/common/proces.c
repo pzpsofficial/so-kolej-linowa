@@ -10,6 +10,9 @@
 #include <sys/prctl.h>
 #include <unistd.h>
 
+/* Najwięcej argumentów programu (razem z argv[0]). */
+#define MAX_ARGUMENTOW 8
+
 static char katalog[512] = ".";
 static char sciezka[600];
 
@@ -60,7 +63,19 @@ pid_t proces_uruchom(char *const argv[], pid_t grupa, const sigset_t *maska)
             ZGLOS("sigprocmask(dziecko)");
             _exit(127);
         }
-        execv(program, argv);
+        /*
+         * argv[0] dziecka to pełna ścieżka programu: na jej podstawie dziecko
+         * znajduje pozostałe programy (np. generator znajduje "turysta").
+         */
+        char *argumenty[MAX_ARGUMENTOW + 1];
+        int n = 0;
+        argumenty[n++] = (char *)program;
+        while (n < MAX_ARGUMENTOW && argv[n] != NULL) {
+            argumenty[n] = argv[n];
+            n++;
+        }
+        argumenty[n] = NULL;
+        execv(program, argumenty);
         ZGLOS(program);   /* execv() wraca tylko przy błędzie */
         _exit(127);
     }

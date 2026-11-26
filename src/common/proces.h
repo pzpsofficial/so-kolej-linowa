@@ -20,7 +20,8 @@ const char *proces_sciezka(const char *nazwa);
  * Uruchamia program w nowym procesie i zwraca jego PID (albo -1 z errno,
  * gdy fork() się nie udał, np. EAGAIN przy limicie procesów).
  *
- *   argv   - argumenty programu; argv[0] to nazwa programu,
+ *   argv   - argumenty programu; argv[0] to nazwa programu w katalogu bin/
+ *            (dziecko dostaje w argv[0] pełną ścieżkę), najwyżej 8 pozycji,
  *   grupa  - grupa procesów dziecka: 0 = nowa grupa z PID dziecka,
  *            > 0 = dołącz do tej grupy, -1 = zostań w grupie rodzica,
  *   maska  - maska sygnałów przywracana w dziecku przed exec()
