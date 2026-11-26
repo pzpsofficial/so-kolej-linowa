@@ -8,5 +8,8 @@ build/
 logs/
 *.log
 
+# Plik, z którego ftok() tworzy klucze IPC (powstaje przy uruchomieniu)
+kolej.klucz
+
 # System
 .DS_Store
